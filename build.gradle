@@ -1,4 +1,4 @@
-group 'core.haw-hamburg.de'
+group 'core.informatik.haw-hamburg.de'
 version '1.0-SNAPSHOT'
 
 buildscript {
