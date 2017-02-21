@@ -1,4 +1,4 @@
-package de.haw_hamburg.informatik.core.rain_collection_service.database;
+package de.haw_hamburg.informatik.core.temp_collection_service.database;
 
 /**
  * Created by TimoHäckel on 30.01.2017.

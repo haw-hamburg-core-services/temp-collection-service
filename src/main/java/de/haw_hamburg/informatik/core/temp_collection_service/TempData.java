@@ -23,26 +23,15 @@ public class TempData {
     private final String srcId;
 
     /**
-     * state if its raining or not
+     * temperature
      */
-    private final boolean raining;
+    private final double temperature;
 
-    /**
-     * intensity of the rain from 0 (no rain at all) to 10 (heavy rain)
-     */
-    private final int intensity;
-
-    public RainData(long id, Timestamp timestamp, String srcId, boolean raining, int intensity) {
+    public TempData(long id, Timestamp timestamp, String srcId, double temperature) {
         this.id = id;
         this.timestamp = timestamp;
         this.srcId = srcId;
-        this.raining = raining;
-        if(intensity > 10){
-            intensity = 10;
-        } else if(intensity < 0){
-            intensity = 0;
-        }
-        this.intensity = intensity;
+        this.temperature = temperature;
     }
 
     public long getId() {
@@ -57,22 +46,17 @@ public class TempData {
         return srcId;
     }
 
-    public boolean isRaining() {
-        return raining;
-    }
-
-    public int getIntensity() {
-        return intensity;
+    public double getTemperature() {
+        return temperature;
     }
 
     @Override
     public String toString() {
-        return "RainData{" +
+        return "TempData{" +
                 "id=" + id +
                 ", timestamp=" + timestamp +
                 ", srcId='" + srcId + '\'' +
-                ", raining=" + raining +
-                ", intensity=" + intensity +
+                ", temperature=" + temperature +
                 '}';
     }
 }

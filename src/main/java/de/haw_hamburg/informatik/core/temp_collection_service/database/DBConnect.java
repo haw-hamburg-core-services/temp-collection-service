@@ -1,6 +1,6 @@
-package de.haw_hamburg.informatik.core.rain_collection_service.database;
+package de.haw_hamburg.informatik.core.temp_collection_service.database;
 
-import de.haw_hamburg.informatik.core.rain_collection_service.RainData;
+import de.haw_hamburg.informatik.core.temp_collection_service.TempData;
 
 import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.Properties;
 public class DBConnect {
 
     private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
-    private static String DB_CONNECTION = "jdbc:mysql://localhost:3306/raindata";
+    private static String DB_CONNECTION = "jdbc:mysql://localhost:3306/tempdata";
     private static String DB_USER = "root";
     private static String DB_PASSWORD = "";
     private static boolean propertiesLoaded = false;
@@ -57,22 +57,19 @@ public class DBConnect {
         return dbConnection;
     }
 
-    public static DataBaseReturns insert(String srcId, boolean raining, int intensity){
+    public static DataBaseReturns insert(String srcId, double temperature){
         Connection dbConnection = null;
         PreparedStatement preparedStatement = null;
         DataBaseReturns ret = DataBaseReturns.SUCCESS;
 
-        if(intensity>10 || intensity<0){
-            return DataBaseReturns.PARAMETER_ERROR;
-        }
         String retSrcId = srcId.substring(0, Math.min(srcId.length(), 32));
 
         try {
             dbConnection = getDBConnection();
 
-            String insertTableSQL = "INSERT INTO raindatacollection"
-                    + " (id, timestamp, srcid, raining, intensity) VALUES"
-                    + "(NULL, CURRENT_TIMESTAMP, ?, ?, ?)";
+            String insertTableSQL = "INSERT INTO tempdatacollection"
+                    + " (id, timestamp, srcid, temperature) VALUES"
+                    + "(NULL, CURRENT_TIMESTAMP, ?, ?)";
             preparedStatement = dbConnection.prepareStatement(insertTableSQL);
 
 
@@ -80,8 +77,7 @@ public class DBConnect {
 
             //preparedStatement.setString(2, "CURRENT_TIMESTAMP");
             preparedStatement.setString(1, retSrcId);
-            preparedStatement.setBoolean(2, raining);
-            preparedStatement.setInt(3, intensity);
+            preparedStatement.setDouble(2, temperature);
 
             // execute insert SQL stetement
             preparedStatement.executeUpdate();
@@ -113,7 +109,7 @@ public class DBConnect {
     public static void printRecords(){
         Connection connection = null;
 
-        String query = "SELECT * FROM raindatacollection";
+        String query = "SELECT * FROM tempdatacollection";
         try {
             connection = getDBConnection();
             Statement statement = connection.createStatement();
@@ -122,7 +118,7 @@ public class DBConnect {
 
             System.out.println("Database Records:");
             while(resultSet.next()){
-                RainData data = new RainData(resultSet.getLong("id"), resultSet.getTimestamp("timestamp", Calendar.getInstance()),resultSet.getString("srcid"),resultSet.getBoolean("raining"), resultSet.getInt("intensity"));
+                TempData data = new TempData(resultSet.getLong("id"), resultSet.getTimestamp("timestamp", Calendar.getInstance()),resultSet.getString("srcid"), resultSet.getDouble("temperature"));
                 System.out.println(data);
             }
 
